@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ua">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <title>Студенти</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+</head>
+
+<body>
+    <div id="app">
+        <h1>Пошук</h1>
+        <input placeholder="type name" v-model="searchName" />
+        <table>
+            <tr v-for="(stud, index) in filteredStudents" :key="index">
+                <td :class="{ 'red': stud.highlighted }">{{ stud.name }}</td>
+                <td>
+                    <input type="checkbox" v-model="stud.workDone" />
+                </td>
+                <td>{{ stud.group }}</td>
+                <td><a @click="deleteStudent(stud.id)">Видалити</a></td>
+            </tr>
+        </table>
+    </div>
+</body>
+<script>
+    var arrayStudents = [
+        {
+            id: 0,
+            name: "Соломін Данило",
+            group: "RPZ 20 1",
+            workDone: false,
+        },
+        {
+            id: 1,
+            name: "Нерознак Лера",
+            group: "RPZ 20 2",
+            workDone: false,
+        },
+        {
+            id: 2,
+            name: "Пастушенко Александр",
+            group: "RPZ 20 1",
+            workDone: false,
+        },
+        {
+            id: 3,
+            name: "Мажура Киррило",
+            group: "RPZ 20 2",
+            workDone: false,
+        },
+        {
+            id: 4,
+            name: "Коваль Карина",
+            group: "RPZ 20 1",
+            workDone: false,
+        },
+    ];
+    new Vue({
+        el: "#app",
+        data: {
+            students: arrayStudents,
+            searchName: "",
+            deleteLink: "",
+        },
+        computed: {
+            filteredStudents: function () {
+                const searchNameLower = this.searchName.toLowerCase();
+                return this.students.map((stud) => ({
+                    ...stud,
+                    highlighted:
+                        stud.name.toLowerCase().includes(searchNameLower) &&
+                        searchNameLower.length > 0,
+                }));
+            },
+        },
+        //   computed: {
+        //     searchResult: function () {
+        //       const searchName = this.searchName.toLowerCase();
+        //       return this.students.filter((stud) =>
+        //         stud.name.toLowerCase().includes(searchName)
+        //       );
+        //     },
+        //   },
+        methods: {
+            deleteStudent(id) {
+                const index = this.students.findIndex((stud) => stud.id === id);
+                if (index !== -1) {
+                    this.students.splice(index, 1);
+                }
+            },
+        },
+    });
+</script>
+
+</html>
